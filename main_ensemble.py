@@ -232,15 +232,14 @@ def main():
         kelly_fraction=0.25,     # Quarter Kelly - safe but still grows well
         max_bet_fraction=0.15,   # Cap at 15% of bankroll per bet
         min_bet=2.0,             # Minimum $2 to make bet worthwhile
-        max_bet=50.0             # Cap at $50 to diversify risk
+        max_bet=50.0,            # Cap at $50 to diversify risk
+        dry_run=args.dry_run
     )
 
     # Add tracking to bot instance
     bot.tracker = tracker
     bot.dashboard = dashboard
     bot.last_signal_results = []
-
-    # Monkey patch to capture signal results
     original_analyze = decision_maker.analyze_market
     def patched_analyze(market):
         result = original_analyze(market)

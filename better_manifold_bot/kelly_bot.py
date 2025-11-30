@@ -27,7 +27,8 @@ class KellyBot(ManifoldBot):
         kelly_fraction: float = 0.25,
         max_bet_fraction: float = 0.10,
         min_bet: float = 1.0,
-        max_bet: float = 100.0
+        max_bet: float = 100.0,
+        dry_run: bool = False
     ):
         """
         Initialize Kelly bot.
@@ -39,6 +40,7 @@ class KellyBot(ManifoldBot):
             max_bet_fraction: Maximum fraction of bankroll per bet
             min_bet: Minimum bet size
             max_bet: Maximum bet size
+            dry_run: If True, simulate bets without placing them
         """
         super().__init__(manifold_api_key, decision_maker)
         self.kelly_calculator = KellyCalculator(
@@ -47,6 +49,7 @@ class KellyBot(ManifoldBot):
         )
         self.min_bet = min_bet
         self.max_bet = max_bet
+        self.dry_run = dry_run
 
     def calculate_bet_amount(self, decision: MarketDecision) -> float:
         """
@@ -113,6 +116,10 @@ class KellyBot(ManifoldBot):
         if bet_amount < self.min_bet:
             logger.info(f"Kelly bet size ${bet_amount:.2f} below minimum ${self.min_bet}, skipping")
             return False, 0.0
+
+        if self.dry_run:
+            logger.info(f"[DRY RUN] Would place bet: ${bet_amount:.2f} on {decision.decision}")
+            return True, bet_amount
 
         # Place the bet
         success = super().place_bet_if_decision(decision, bet_amount)

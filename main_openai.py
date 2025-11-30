@@ -143,7 +143,8 @@ def main():
         kelly_fraction=0.25,     # Quarter Kelly
         max_bet_fraction=0.15,   # Cap at 15% of bankroll
         min_bet=2.0,
-        max_bet=50.0
+        max_bet=50.0,
+        dry_run=args.dry_run
     )
 
     # Add tracking to bot instance
