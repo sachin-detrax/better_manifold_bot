@@ -1,5 +1,7 @@
 # Better Manifold Bot
 
+![Poster](media/poster.png)
+
 A sophisticated trading bot for [Manifold Markets](https://manifold.markets/), designed to make intelligent betting decisions using a multi-signal ensemble approach, including OpenAI's GPT-4o-mini for structured forecasting.
 
 ## Features
