@@ -1,0 +1,1 @@
+timestamp,session_id,market_id,question,direction,bet_amount,market_prob,ensemble_prob,confidence,edge,current_balance,llm_prob,llm_conf,historical_prob,historical_conf,microstructure_prob,microstructure_conf,resolved,resolution,profit_loss,roi,resolution_date

@@ -117,10 +117,55 @@ class KellyBot(ManifoldBot):
             logger.info(f"Kelly bet size ${bet_amount:.2f} below minimum ${self.min_bet}, skipping")
             return False, 0.0
 
+        # Prepare data for tracking
+        market_dict = {
+            'id': decision.market_id,
+            'question': decision.question,
+            'probability': decision.current_probability
+        }
+        
+        # Get current balance
+        current_balance = self.writer.get_balance()
+
         if self.dry_run:
             logger.info(f"[DRY RUN] Would place bet: ${bet_amount:.2f} on {decision.decision}")
+            
+            # Track the simulated bet
+            if hasattr(self, 'tracker') and self.tracker:
+                self.tracker.log_bet(
+                    market=market_dict,
+                    decision=decision,
+                    bet_amount=bet_amount,
+                    current_balance=current_balance,
+                    signal_results=getattr(self, 'last_signal_results', [])
+                )
+                
+                # Update live dashboard if available
+                if hasattr(self, 'dashboard') and self.dashboard:
+                    stats = self.tracker.get_session_stats()
+                    self.dashboard.show_live_session_stats(stats, current_balance)
+            
             return True, bet_amount
 
         # Place the bet
         success = super().place_bet_if_decision(decision, bet_amount)
+        
+        if success:
+            # Track the real bet
+            if hasattr(self, 'tracker') and self.tracker:
+                # Update balance after bet
+                new_balance = self.writer.get_balance()
+                self.tracker.log_bet(
+                    market=market_dict,
+                    decision=decision,
+                    bet_amount=bet_amount,
+                    current_balance=new_balance,
+                    signal_results=getattr(self, 'last_signal_results', [])
+                )
+                
+                # Update live dashboard if available
+                if hasattr(self, 'dashboard') and self.dashboard:
+                    stats = self.tracker.get_session_stats()
+                    self.dashboard.show_live_session_stats(stats, new_balance)
+
         return success, bet_amount if success else 0.0
