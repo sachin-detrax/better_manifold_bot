@@ -127,4 +127,13 @@ python main_openai.py --show-report --generate-graphs
 
 ## License
 
-[MIT License](LICENSE)
+
+This project is released under a **Non-Commercial License**.
+
+You are allowed to use, modify, and distribute the code **for personal or educational purposes only**.
+
+🚫 **Commercial use of any kind is strictly prohibited.**  
+This includes selling, licensing, hosting as a paid service, or using the code in any product that generates revenue.
+
+For commercial rights, contact the repository owner.
+
